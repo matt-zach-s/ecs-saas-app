@@ -7,13 +7,13 @@ name = "thanksgiving_app"
 type = "docker_build"
 
 # Reference the Dockerfile in this repository
-[public_repo]
+[connected_repo]
 repo      = "matt-zach-s/ecs-saas-app"
 directory = "."
 branch    = "main"
 
 # Path to Dockerfile relative to the directory
-Dockerfile = "Dockerfile"
+dockerfile = "Dockerfile"
 
 # Environment variables for the container (using new env format)
 [env]
