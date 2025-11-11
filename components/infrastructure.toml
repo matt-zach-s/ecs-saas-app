@@ -18,7 +18,7 @@ branch    = "main"
 # These will be passed to the Terraform module
 [vars]
 # Get AWS region from sandbox outputs
-aws_region = "{{.nuon.install.region}}"
+aws_region = "{{.nuon.cloud_account.aws.region}}"
 
 # Application configuration
 app_name       = "thanksgiving-meal-planner"
@@ -30,4 +30,4 @@ task_memory    = "512"
 
 # The full container image URL comes from the docker component
 # This references the output from the thanksgiving_app component
-container_image_url = "{{.nuon.components.thanksgiving_app.image_url}}"
+container_image_url = "{{.nuon.components.thanksgiving_app.outputs.image.repository}}:{{.nuon.components.thanksgiving_app.outputs.image.tag}}"
