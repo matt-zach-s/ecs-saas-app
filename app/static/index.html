@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanksgiving Meal Planner</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            color: #666;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            background: white;
+            color: #667eea;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .tasks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .task-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .task-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0,0,0,0.2);
+        }
+
+        .task-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .task-card.completed::before {
+            background: #10b981;
+        }
+
+        .task-card.in_progress::before {
+            background: #f59e0b;
+        }
+
+        .task-category {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.75em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+        }
+
+        .category-main {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .category-side {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .category-dessert {
+            background: #fce7f3;
+            color: #db2777;
+        }
+
+        .category-appetizer {
+            background: #d1fae5;
+            color: #059669;
+        }
+
+        .task-name {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+
+        .task-description {
+            color: #6b7280;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .task-meta {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #6b7280;
+        }
+
+        .meta-icon {
+            font-size: 1.2em;
+        }
+
+        .task-ingredients {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .task-ingredients h4 {
+            font-size: 0.9em;
+            color: #6b7280;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .ingredients-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .ingredient-tag {
+            background: #f3f4f6;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            color: #4b5563;
+        }
+
+        .status-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.75em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-planned {
+            background: #e0e7ff;
+            color: #4f46e5;
+        }
+
+        .status-in_progress {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .status-completed {
+            background: #d1fae5;
+            color: #059669;
+        }
+
+        .status-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .status-btn {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.85em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .status-btn.btn-start {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .status-btn.btn-complete {
+            background: #d1fae5;
+            color: #059669;
+        }
+
+        .status-btn.btn-reset {
+            background: #e0e7ff;
+            color: #4f46e5;
+        }
+
+        .status-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .loading {
+            text-align: center;
+            color: white;
+            font-size: 1.5em;
+            margin: 50px 0;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: white;
+            font-size: 1.2em;
+            margin: 50px 0;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+
+            .tasks-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🦃 Thanksgiving Meal Planner</h1>
+            <p>Plan, Track, and Execute Your Perfect Feast</p>
+        </header>
+
+        <div class="stats-grid" id="stats">
+            <div class="stat-card">
+                <h3 id="total-tasks">0</h3>
+                <p>Total Dishes</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="completed-tasks">0</h3>
+                <p>Completed</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="in-progress-tasks">0</h3>
+                <p>In Progress</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="planned-tasks">0</h3>
+                <p>Planned</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="cooking-time">0</h3>
+                <p>Total Hours</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="filter-btn active" onclick="filterTasks('all')">All</button>
+            <button class="filter-btn" onclick="filterTasks('main')">Main Course</button>
+            <button class="filter-btn" onclick="filterTasks('side')">Sides</button>
+            <button class="filter-btn" onclick="filterTasks('dessert')">Desserts</button>
+            <button class="filter-btn" onclick="filterTasks('appetizer')">Appetizers</button>
+            <button class="filter-btn" onclick="filterTasks('planned')">Planned</button>
+            <button class="filter-btn" onclick="filterTasks('in_progress')">In Progress</button>
+            <button class="filter-btn" onclick="filterTasks('completed')">Completed</button>
+        </div>
+
+        <div class="tasks-grid" id="tasks-container">
+            <div class="loading">Loading your feast...</div>
+        </div>
+    </div>
+
+    <script>
+        let allTasks = [];
+        let currentFilter = 'all';
+
+        async function loadTasks() {
+            try {
+                const response = await fetch('/api/tasks');
+                allTasks = await response.json();
+                renderTasks();
+            } catch (error) {
+                console.error('Error loading tasks:', error);
+                document.getElementById('tasks-container').innerHTML =
+                    '<div class="empty-state">Failed to load tasks. Please refresh the page.</div>';
+            }
+        }
+
+        async function loadStats() {
+            try {
+                const response = await fetch('/api/stats');
+                const stats = await response.json();
+
+                document.getElementById('total-tasks').textContent = stats.total_tasks;
+                document.getElementById('completed-tasks').textContent = stats.completed;
+                document.getElementById('in-progress-tasks').textContent = stats.in_progress;
+                document.getElementById('planned-tasks').textContent = stats.planned;
+                document.getElementById('cooking-time').textContent =
+                    Math.round(stats.total_cooking_time_minutes / 60) + 'h';
+                document.getElementById('progress-fill').style.width =
+                    stats.completion_percentage + '%';
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+
+        function renderTasks() {
+            const container = document.getElementById('tasks-container');
+
+            let filteredTasks = allTasks;
+            if (currentFilter !== 'all') {
+                if (['planned', 'in_progress', 'completed'].includes(currentFilter)) {
+                    filteredTasks = allTasks.filter(task => task.status === currentFilter);
+                } else {
+                    filteredTasks = allTasks.filter(task => task.category === currentFilter);
+                }
+            }
+
+            if (filteredTasks.length === 0) {
+                container.innerHTML = '<div class="empty-state">No tasks found for this filter.</div>';
+                return;
+            }
+
+            container.innerHTML = filteredTasks.map(task => `
+                <div class="task-card ${task.status}" data-task-id="${task.id}">
+                    <span class="status-badge status-${task.status}">${task.status.replace('_', ' ')}</span>
+                    <span class="task-category category-${task.category}">${task.category}</span>
+                    <div class="task-name">${task.name}</div>
+                    <div class="task-description">${task.description}</div>
+                    <div class="task-meta">
+                        <div class="meta-item">
+                            <span class="meta-icon">⏰</span>
+                            <span>${task.start_time || 'Not scheduled'}</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-icon">⏱️</span>
+                            <span>${task.duration_minutes} min</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-icon">👨‍🍳</span>
+                            <span>${task.assigned_to || 'Unassigned'}</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-icon">🎯</span>
+                            <span>Priority ${task.priority}</span>
+                        </div>
+                    </div>
+                    ${task.ingredients && task.ingredients.length > 0 ? `
+                        <div class="task-ingredients">
+                            <h4>Ingredients</h4>
+                            <div class="ingredients-list">
+                                ${task.ingredients.map(ing => `
+                                    <span class="ingredient-tag">${ing.trim()}</span>
+                                `).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+                    <div class="status-controls">
+                        ${task.status === 'planned' ? `
+                            <button class="status-btn btn-start" onclick="updateTaskStatus(${task.id}, 'in_progress')">
+                                Start Cooking 🔥
+                            </button>
+                        ` : ''}
+                        ${task.status === 'in_progress' ? `
+                            <button class="status-btn btn-complete" onclick="updateTaskStatus(${task.id}, 'completed')">
+                                Mark Complete ✓
+                            </button>
+                        ` : ''}
+                        ${task.status === 'completed' ? `
+                            <button class="status-btn btn-reset" onclick="updateTaskStatus(${task.id}, 'planned')">
+                                Reset 🔄
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>
+            `).join('');
+
+            loadStats();
+        }
+
+        async function updateTaskStatus(taskId, newStatus) {
+            try {
+                const response = await fetch(`/api/tasks/${taskId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ status: newStatus })
+                });
+
+                if (response.ok) {
+                    await loadTasks();
+                }
+            } catch (error) {
+                console.error('Error updating task:', error);
+            }
+        }
+
+        function filterTasks(filter) {
+            currentFilter = filter;
+
+            // Update active button
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            renderTasks();
+        }
+
+        // Load data on page load
+        loadTasks();
+
+        // Refresh data every 30 seconds
+        setInterval(() => {
+            loadTasks();
+        }, 30000);
+    </script>
+</body>
+</html>

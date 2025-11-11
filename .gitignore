@@ -53,3 +53,8 @@ logs/
 
 # Docker
 docker-compose.override.yml
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
