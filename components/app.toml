@@ -3,7 +3,7 @@
 # Thanksgiving Meal Planner - Docker Component
 # This component builds the Flask application container from the Dockerfile
 
-name = "thanksgiving-app"
+name = "thanksgiving_app"
 type = "docker_build"
 
 # Reference the Dockerfile in this repository
