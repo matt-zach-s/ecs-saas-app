@@ -20,8 +20,8 @@ resource "aws_vpc" "main" {
   enable_dns_support   = true
 
   tags = {
-    Name        = "${var.app_name}-vpc"
-    Environment = var.environment
+    "install.nuon.co/id"     = var.install_id
+    "component.nuon.co/name" = var.component_name
   }
 }
 
@@ -29,8 +29,8 @@ resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name        = "${var.app_name}-igw"
-    Environment = var.environment
+    "install.nuon.co/id"     = var.install_id
+    "component.nuon.co/name" = var.component_name
   }
 }
 
@@ -42,8 +42,8 @@ resource "aws_subnet" "public" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name        = "${var.app_name}-public-subnet-${count.index + 1}"
-    Environment = var.environment
+    "install.nuon.co/id"     = var.install_id
+    "component.nuon.co/name" = var.component_name
   }
 }
 
@@ -56,8 +56,8 @@ resource "aws_route_table" "public" {
   }
 
   tags = {
-    Name        = "${var.app_name}-public-rt"
-    Environment = var.environment
+    "install.nuon.co/id"     = var.install_id
+    "component.nuon.co/name" = var.component_name
   }
 }
 
@@ -88,8 +88,8 @@ resource "aws_security_group" "alb" {
   }
 
   tags = {
-    Name        = "${var.app_name}-alb-sg"
-    Environment = var.environment
+    "install.nuon.co/id"     = var.install_id
+    "component.nuon.co/name" = var.component_name
   }
 }
 
@@ -114,8 +114,8 @@ resource "aws_security_group" "ecs_tasks" {
   }
 
   tags = {
-    Name        = "${var.app_name}-ecs-tasks-sg"
-    Environment = var.environment
+    "install.nuon.co/id"     = var.install_id
+    "component.nuon.co/name" = var.component_name
   }
 }
 
@@ -128,8 +128,8 @@ resource "aws_lb" "main" {
   subnets            = aws_subnet.public[*].id
 
   tags = {
-    Name        = "${var.app_name}-alb"
-    Environment = var.environment
+    "install.nuon.co/id"     = var.install_id
+    "component.nuon.co/name" = var.component_name
   }
 }
 
@@ -153,8 +153,8 @@ resource "aws_lb_target_group" "app" {
   }
 
   tags = {
-    Name        = "${var.app_name}-tg"
-    Environment = var.environment
+    "install.nuon.co/id"     = var.install_id
+    "component.nuon.co/name" = var.component_name
   }
 }
 
@@ -179,8 +179,8 @@ resource "aws_ecs_cluster" "main" {
   }
 
   tags = {
-    Name        = "${var.app_name}-cluster"
-    Environment = var.environment
+    "install.nuon.co/id"     = var.install_id
+    "component.nuon.co/name" = var.component_name
   }
 }
 
@@ -190,8 +190,8 @@ resource "aws_cloudwatch_log_group" "app" {
   retention_in_days = 7
 
   tags = {
-    Name        = "${var.app_name}-logs"
-    Environment = var.environment
+    "install.nuon.co/id"     = var.install_id
+    "component.nuon.co/name" = var.component_name
   }
 }
 
@@ -213,8 +213,8 @@ resource "aws_iam_role" "ecs_task_execution_role" {
   })
 
   tags = {
-    Name        = "${var.app_name}-ecs-task-execution-role"
-    Environment = var.environment
+    "install.nuon.co/id"     = var.install_id
+    "component.nuon.co/name" = var.component_name
   }
 }
 
@@ -268,8 +268,8 @@ resource "aws_ecs_task_definition" "app" {
   ])
 
   tags = {
-    Name        = "${var.app_name}-task"
-    Environment = var.environment
+    "install.nuon.co/id"     = var.install_id
+    "component.nuon.co/name" = var.component_name
   }
 }
 
@@ -296,7 +296,8 @@ resource "aws_ecs_service" "app" {
   depends_on = [aws_lb_listener.app]
 
   tags = {
-    Name        = "${var.app_name}-service"
+    "install.nuon.co/id"     = var.install_id
+    "component.nuon.co/name" = var.component_name
   }
 }
 

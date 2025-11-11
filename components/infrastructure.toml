@@ -31,3 +31,7 @@ task_memory    = "512"
 # The full container image URL comes from the docker component
 # This references the output from the thanksgiving_app component
 container_image_url = "{{.nuon.components.thanksgiving_app.outputs.image.repository}}:{{.nuon.components.thanksgiving_app.outputs.image.tag}}"
+
+# Nuon tagging variables
+install_id     = "{{.nuon.install.id}}"
+component_name = "ecs_infrastructure"

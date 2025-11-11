@@ -57,3 +57,15 @@ variable "container_image_url" {
   type        = string
   default     = ""
 }
+
+variable "install_id" {
+  description = "Nuon install ID for tagging"
+  type        = string
+  default     = "local"
+}
+
+variable "component_name" {
+  description = "Nuon component name for tagging"
+  type        = string
+  default     = "ecs_infrastructure"
+}
