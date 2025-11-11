@@ -5,5 +5,5 @@ name        = "thanksgiving-meal-planner-{{.nuon.install.id}}"
 description = "CloudFormation stack for Thanksgiving Meal Planner: Install {{.nuon.install.id}}"
 
 # nested stack templates
-vpc_nested_template_url    = "https://nuon-artifacts.s3.us-west-2.amazonaws.com/aws-cloudformation-templates/v0.1.8/vpc/ecs/default/stack.yaml"
+vpc_nested_template_url    = "https://nuon-artifacts.s3.us-west-2.amazonaws.com/aws-cloudformation-templates/v0.1.8/vpc/eks/default/stack.yaml"
 runner_nested_template_url = "https://nuon-artifacts.s3.us-west-2.amazonaws.com/aws-cloudformation-templates/v0.1.8/runner/asg/stack.yaml"
