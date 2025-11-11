@@ -69,7 +69,7 @@ resource "aws_route_table_association" "public" {
 
 # Security Group for ALB
 resource "aws_security_group" "alb" {
-  name        = "${var.app_name}-alb-sg"
+  name        = "${var.app_name}-${var.install_id}-alb-sg"
   description = "Security group for Application Load Balancer"
   vpc_id      = aws_vpc.main.id
 
@@ -95,7 +95,7 @@ resource "aws_security_group" "alb" {
 
 # Security Group for ECS Tasks
 resource "aws_security_group" "ecs_tasks" {
-  name        = "${var.app_name}-ecs-tasks-sg"
+  name        = "${var.app_name}-${var.install_id}-ecs-tasks-sg"
   description = "Security group for ECS tasks"
   vpc_id      = aws_vpc.main.id
 
@@ -121,7 +121,7 @@ resource "aws_security_group" "ecs_tasks" {
 
 # Application Load Balancer
 resource "aws_lb" "main" {
-  name               = "${var.app_name}-alb"
+  name               = "${var.app_name}-${var.install_id}-alb"
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb.id]
@@ -134,7 +134,7 @@ resource "aws_lb" "main" {
 }
 
 resource "aws_lb_target_group" "app" {
-  name        = "${var.app_name}-tg"
+  name        = "${var.app_name}-${var.install_id}-tg"
   port        = var.container_port
   protocol    = "HTTP"
   vpc_id      = aws_vpc.main.id
@@ -171,7 +171,7 @@ resource "aws_lb_listener" "app" {
 
 # ECS Cluster
 resource "aws_ecs_cluster" "main" {
-  name = "${var.app_name}-cluster"
+  name = "${var.app_name}-${var.install_id}-cluster"
 
   setting {
     name  = "containerInsights"
@@ -186,7 +186,7 @@ resource "aws_ecs_cluster" "main" {
 
 # CloudWatch Log Group
 resource "aws_cloudwatch_log_group" "app" {
-  name              = "/ecs/${var.app_name}"
+  name              = "/ecs/${var.app_name}-${var.install_id}"
   retention_in_days = 7
 
   tags = {
@@ -197,7 +197,7 @@ resource "aws_cloudwatch_log_group" "app" {
 
 # ECS Task Execution Role
 resource "aws_iam_role" "ecs_task_execution_role" {
-  name = "${var.app_name}-ecs-task-execution-role"
+  name = "${var.app_name}-${var.install_id}-ecs-task-execution-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -225,7 +225,7 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_policy" {
 
 # ECS Task Definition
 resource "aws_ecs_task_definition" "app" {
-  family                   = var.app_name
+  family                   = "${var.app_name}-${var.install_id}"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   cpu                      = var.task_cpu
@@ -234,7 +234,7 @@ resource "aws_ecs_task_definition" "app" {
 
   container_definitions = jsonencode([
     {
-      name  = var.app_name
+      name  = "${var.app_name}-${var.install_id}"
       # Use container_image_url if provided (Nuon), otherwise fall back to ecr_repository_url:image_tag
       image = var.container_image_url != "" ? var.container_image_url : "${var.ecr_repository_url}:${var.image_tag}"
 
@@ -275,7 +275,7 @@ resource "aws_ecs_task_definition" "app" {
 
 # ECS Service
 resource "aws_ecs_service" "app" {
-  name            = "${var.app_name}-service"
+  name            = "${var.app_name}-${var.install_id}-service"
   cluster         = aws_ecs_cluster.main.id
   task_definition = aws_ecs_task_definition.app.arn
   desired_count   = var.desired_count
@@ -289,7 +289,7 @@ resource "aws_ecs_service" "app" {
 
   load_balancer {
     target_group_arn = aws_lb_target_group.app.arn
-    container_name   = var.app_name
+    container_name   = "${var.app_name}-${var.install_id}"
     container_port   = var.container_port
   }
 
