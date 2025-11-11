@@ -1,0 +1,11 @@
+#:schema https://api.nuon.co/v1/general/config-schema?source=sandbox
+
+# Terraform version to use for sandbox provisioning
+terraform_version = "1.11.4"
+
+# Use Nuon's minimal AWS sandbox (VPC, subnets, networking)
+# This provides the base infrastructure that your ECS components will use
+[public_repo]
+repo      = "nuonco/aws-min-sandbox"
+branch    = "main"
+directory = "."
