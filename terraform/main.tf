@@ -3,20 +3,10 @@ resource "aws_vpc" "main" {
   cidr_block           = "10.0.0.0/16"
   enable_dns_hostnames = true
   enable_dns_support   = true
-
-  tags = {
-    "install.nuon.co/id"     = var.install_id
-    "component.nuon.co/name" = var.component_name
-  }
 }
 
 resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
-
-  tags = {
-    "install.nuon.co/id"     = var.install_id
-    "component.nuon.co/name" = var.component_name
-  }
 }
 
 resource "aws_subnet" "public" {
@@ -25,11 +15,6 @@ resource "aws_subnet" "public" {
   cidr_block              = "10.0.${count.index + 1}.0/24"
   availability_zone       = data.aws_availability_zones.available.names[count.index]
   map_public_ip_on_launch = true
-
-  tags = {
-    "install.nuon.co/id"     = var.install_id
-    "component.nuon.co/name" = var.component_name
-  }
 }
 
 resource "aws_route_table" "public" {
@@ -38,11 +23,6 @@ resource "aws_route_table" "public" {
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.main.id
-  }
-
-  tags = {
-    "install.nuon.co/id"     = var.install_id
-    "component.nuon.co/name" = var.component_name
   }
 }
 
@@ -71,11 +51,6 @@ resource "aws_security_group" "alb" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
-  tags = {
-    "install.nuon.co/id"     = var.install_id
-    "component.nuon.co/name" = var.component_name
-  }
 }
 
 # Security Group for ECS Tasks
@@ -97,11 +72,6 @@ resource "aws_security_group" "ecs_tasks" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
-  tags = {
-    "install.nuon.co/id"     = var.install_id
-    "component.nuon.co/name" = var.component_name
-  }
 }
 
 # Application Load Balancer
@@ -111,11 +81,6 @@ resource "aws_lb" "main" {
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb.id]
   subnets            = aws_subnet.public[*].id
-
-  tags = {
-    "install.nuon.co/id"     = var.install_id
-    "component.nuon.co/name" = var.component_name
-  }
 }
 
 resource "aws_lb_target_group" "app" {
@@ -135,11 +100,6 @@ resource "aws_lb_target_group" "app" {
     protocol            = "HTTP"
     timeout             = 5
     unhealthy_threshold = 2
-  }
-
-  tags = {
-    "install.nuon.co/id"     = var.install_id
-    "component.nuon.co/name" = var.component_name
   }
 }
 
@@ -162,22 +122,12 @@ resource "aws_ecs_cluster" "main" {
     name  = "containerInsights"
     value = "enabled"
   }
-
-  tags = {
-    "install.nuon.co/id"     = var.install_id
-    "component.nuon.co/name" = var.component_name
-  }
 }
 
 # CloudWatch Log Group
 resource "aws_cloudwatch_log_group" "app" {
   name              = "/ecs/${var.app_name}-${var.install_id}"
   retention_in_days = 7
-
-  tags = {
-    "install.nuon.co/id"     = var.install_id
-    "component.nuon.co/name" = var.component_name
-  }
 }
 
 # ECS Task Execution Role
@@ -196,11 +146,6 @@ resource "aws_iam_role" "ecs_task_execution_role" {
       }
     ]
   })
-
-  tags = {
-    "install.nuon.co/id"     = var.install_id
-    "component.nuon.co/name" = var.component_name
-  }
 }
 
 resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_policy" {
@@ -251,11 +196,6 @@ resource "aws_ecs_task_definition" "app" {
       }
     }
   ])
-
-  tags = {
-    "install.nuon.co/id"     = var.install_id
-    "component.nuon.co/name" = var.component_name
-  }
 }
 
 # ECS Service
@@ -279,11 +219,6 @@ resource "aws_ecs_service" "app" {
   }
 
   depends_on = [aws_lb_listener.app]
-
-  tags = {
-    "install.nuon.co/id"     = var.install_id
-    "component.nuon.co/name" = var.component_name
-  }
 }
 
 # Data source for availability zones
