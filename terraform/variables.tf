@@ -51,3 +51,9 @@ variable "image_tag" {
   type        = string
   default     = "latest"
 }
+
+variable "container_image_url" {
+  description = "Full container image URL (including tag). Used by Nuon for deployments."
+  type        = string
+  default     = ""
+}

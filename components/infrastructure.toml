@@ -1,0 +1,44 @@
+# Thanksgiving Meal Planner - ECS Infrastructure Component
+# This component provisions AWS ECS infrastructure
+
+name         = "ecs-infrastructure"
+type         = "terraform_module"
+dependencies = ["thanksgiving-app"]
+
+# Reference the Terraform module in this repository
+[connected_repo]
+repo      = "matt-zach-s/ecs-saas-app"
+directory = "terraform"
+branch    = "main"
+
+# Terraform variables
+# These will be passed to the Terraform module
+[[var]]
+name  = "app_name"
+value = "thanksgiving-meal-planner"
+
+[[var]]
+name  = "environment"
+value = "production"
+
+[[var]]
+name  = "container_port"
+value = "5000"
+
+[[var]]
+name  = "desired_count"
+value = "2"
+
+[[var]]
+name  = "task_cpu"
+value = "256"
+
+[[var]]
+name  = "task_memory"
+value = "512"
+
+# The full container image URL comes from the docker component
+# This references the output from the thanksgiving-app component
+[[var]]
+name  = "container_image_url"
+value = "{{.nuon.components.thanksgiving-app.image_url}}"

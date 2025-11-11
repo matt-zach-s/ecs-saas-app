@@ -1,0 +1,23 @@
+# Thanksgiving Meal Planner - Docker Component
+# This component builds the Flask application container
+
+name = "thanksgiving-app"
+type = "dockerfile"
+
+# Reference the Dockerfile in this repository
+[connected_repo]
+repo      = "matt-zach-s/ecs-saas-app"
+directory = "."
+branch    = "main"
+
+# Dockerfile configuration
+dockerfile_path = "Dockerfile"
+
+# Environment variables for the container
+[[env]]
+name  = "ENVIRONMENT"
+value = "production"
+
+[[env]]
+name  = "PORT"
+value = "5000"
