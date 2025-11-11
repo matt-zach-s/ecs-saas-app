@@ -297,7 +297,6 @@ resource "aws_ecs_service" "app" {
 
   tags = {
     Name        = "${var.app_name}-service"
-    Environment = var.environment
   }
 }
 
