@@ -1,21 +1,11 @@
-#:schema https://api.nuon.co/v1/general/config-schema?source=component_config
-
-# Thanksgiving Meal Planner - Docker Component
-# This component builds the Flask application container from the Dockerfile
+#:schema https://api.nuon.co/v1/general/config-schema?type=docker_build
 
 name = "thanksgiving_app"
 type = "docker_build"
 
-# Reference the Dockerfile in this repository
-[connected_repo]
+dockerfile = "Dockerfile"
+
+[public_repo]
 repo      = "matt-zach-s/ecs-saas-app"
 directory = "."
 branch    = "main"
-
-# Path to Dockerfile relative to the directory
-dockerfile = "Dockerfile"
-
-# Environment variables for the container (using new env format)
-[env]
-ENVIRONMENT = "production"
-PORT        = "5000"
