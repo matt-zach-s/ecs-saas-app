@@ -13,7 +13,7 @@ directory = "."
 branch    = "main"
 
 # Path to Dockerfile relative to the directory
-dockerfile_path = "./Dockerfile"
+dockerfile = "./Dockerfile"
 
 # Environment variables for the container (using new env format)
 [env]
