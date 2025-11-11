@@ -15,11 +15,7 @@ branch    = "main"
 # Path to Dockerfile relative to the directory
 dockerfile_path = "./Dockerfile"
 
-# Environment variables for the container
-[[env]]
-name  = "ENVIRONMENT"
-value = "production"
-
-[[env]]
-name  = "PORT"
-value = "5000"
+# Environment variables for the container (using new env format)
+[env]
+ENVIRONMENT = "production"
+PORT        = "5000"

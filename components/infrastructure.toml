@@ -14,40 +14,20 @@ repo      = "matt-zach-s/ecs-saas-app"
 directory = "terraform"
 branch    = "main"
 
-# Terraform variables
+# Terraform variables (using new vars format)
 # These will be passed to the Terraform module
-
+[vars]
 # Get AWS region from sandbox outputs
-[[var]]
-name  = "aws_region"
-value = "{{.nuon.install.region}}"
+aws_region = "{{.nuon.install.region}}"
 
-[[var]]
-name  = "app_name"
-value = "thanksgiving-meal-planner"
-
-[[var]]
-name  = "environment"
-value = "production"
-
-[[var]]
-name  = "container_port"
-value = "5000"
-
-[[var]]
-name  = "desired_count"
-value = "2"
-
-[[var]]
-name  = "task_cpu"
-value = "256"
-
-[[var]]
-name  = "task_memory"
-value = "512"
+# Application configuration
+app_name       = "thanksgiving-meal-planner"
+environment    = "production"
+container_port = "5000"
+desired_count  = "2"
+task_cpu       = "256"
+task_memory    = "512"
 
 # The full container image URL comes from the docker component
 # This references the output from the thanksgiving-app component
-[[var]]
-name  = "container_image_url"
-value = "{{.nuon.components.thanksgiving-app.image_url}}"
+container_image_url = "{{.nuon.components.thanksgiving-app.image_url}}"
