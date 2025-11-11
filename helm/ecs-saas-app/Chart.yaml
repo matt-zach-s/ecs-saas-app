@@ -1,0 +1,13 @@
+apiVersion: v2
+name: ecs-saas-app
+description: A Helm chart for ECS SaaS Application
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+keywords:
+  - flask
+  - saas
+  - web-app
+maintainers:
+  - name: Your Name
+    email: your-email@example.com
