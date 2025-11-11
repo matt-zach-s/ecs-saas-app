@@ -1,6 +1,6 @@
 # Thanksgiving Meal Planner - Nuon App Metadata
 
-version = "v1"
+version = "v2"
 
 display_name = "Thanksgiving Meal Planner"
 description  = "A full-stack SaaS application for planning and executing Thanksgiving meals. Built with Flask, SQLite, and deployed to AWS ECS."

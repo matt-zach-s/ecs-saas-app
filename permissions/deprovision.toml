@@ -1,0 +1,10 @@
+#:schema https://api.nuon.co/v1/general/config-schema?type=runner_role
+
+type = "deprovision"
+name = "{{.nuon.install.id}}-deprovision"
+description = "IAM role for deprovisioning Thanksgiving Meal Planner"
+display_name = "Deprovision Role"
+permissions_boundary = "./deprovision_boundary.json"
+
+[[policies]]
+managed_policy_name = "AdministratorAccess"

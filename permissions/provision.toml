@@ -1,0 +1,10 @@
+#:schema https://api.nuon.co/v1/general/config-schema?type=runner_role
+
+type = "provision"
+name = "{{.nuon.install.id}}-provision"
+description = "IAM role for provisioning Thanksgiving Meal Planner infrastructure"
+display_name = "Provision Role"
+permissions_boundary = "./provision_boundary.json"
+
+[[policies]]
+managed_policy_name = "AdministratorAccess"

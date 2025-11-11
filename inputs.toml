@@ -1,0 +1,39 @@
+#:schema https://api.nuon.co/v1/general/config-schema?source=inputs
+
+[[group]]
+name         = "dns"
+description  = "DNS Configurations"
+display_name = "DNS Settings for Thanksgiving Meal Planner"
+
+[[input]]
+name         = "domain"
+description  = "Root domain for the application (e.g., nuon.run)"
+default      = "nuon.run"
+display_name = "Domain"
+group        = "dns"
+
+[[input]]
+name         = "sub_domain"
+description  = "The subdomain for the Thanksgiving Meal Planner service"
+default      = "thanksgiving-planner"
+display_name = "Sub Domain"
+group        = "dns"
+
+[[group]]
+name         = "app"
+description  = "Application Configuration"
+display_name = "Application Settings"
+
+[[input]]
+name         = "app_port"
+description  = "Port the Flask application runs on"
+default      = "5000"
+display_name = "Application Port"
+group        = "app"
+
+[[input]]
+name         = "desired_count"
+description  = "Number of ECS tasks to run"
+default      = "2"
+display_name = "Desired Task Count"
+group        = "app"
